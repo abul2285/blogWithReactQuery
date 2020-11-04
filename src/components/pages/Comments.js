@@ -1,58 +1,77 @@
 import request, { gql } from "graphql-request";
-import React from "react";
-import { usePaginatedQuery } from "react-query";
+import React, { useEffect, useState } from "react";
+import { usePaginatedQuery, useQueryCache } from "react-query";
 import Comment from "../comments/Comment";
 import styled from "styled-components";
 import { useParams } from "react-router";
+import AddComment from "../form/AddComment";
+import { InputPlus } from "../Nav/Nav";
 
 const fetchComment = async (key, id) => {
-  const { post } = await request(
+  const {
+    comments: { data },
+  } = await request(
     "https://api.graphqlplaceholder.com/",
     gql`
-      query post($postId: ID!) {
-        post(postId: $postId) {
-          id
-          title
-          body
-          author {
-            name
-            id
-          }
-          comments {
+      query comments($pagination: PaginationInput!) {
+        comments(pagination: $pagination) {
+          count
+          data {
             body
             author {
               name
               id
             }
             id
+            post {
+              id
+            }
           }
         }
       }
     `,
     {
-      postId: id,
+      pagination: {
+        limit: 800,
+      },
     }
   );
-  return post;
+  return data;
 };
 const PostComment = styled.div``;
 export default function Comments() {
+  const [showForm, setShowForm] = useState(false);
+  const [comments, setComments] = useState([]);
   const { postId } = useParams();
-  console.log(postId);
-  const { data, status } = usePaginatedQuery(
-    ["comments", +postId],
-    fetchComment
-  );
+  const { status } = usePaginatedQuery(["comments", +postId], fetchComment);
+
+  const cache = useQueryCache();
+  const data = cache.getQueryData(["comments", +postId]);
+
+  useEffect(() => {
+    if (data) {
+      console.log({ data, postId });
+      const comments = data.filter((item) => item.post.id === postId);
+      setComments([...comments]);
+      console.log(comments);
+    }
+  }, [postId, data]);
+  console.log(comments);
+
   return (
     <>
       {status === "loading" && <h1>loading....</h1>}
       {status === "error" && <h1>loading....</h1>}
       {status === "success" && (
-        <PostComment>
-          {data.comments.map((comment) => (
-            <Comment key={comment.id} comment={comment} postId={postId} />
-          ))}
-        </PostComment>
+        <>
+          {!showForm && <InputPlus clickToShow={setShowForm} />}
+          {showForm && <AddComment id={postId} clickToShow={setShowForm} />}
+          <PostComment>
+            {comments.map((comment) => (
+              <Comment key={comment.id} comment={comment} postId={postId} />
+            ))}
+          </PostComment>
+        </>
       )}
     </>
   );

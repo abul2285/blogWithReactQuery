@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
-import { usePaginatedQuery, useQuery } from "react-query";
+import React, { useEffect, useState } from "react";
+import { usePaginatedQuery, useQuery, useQueryCache } from "react-query";
 import { request, gql } from "graphql-request";
 import Post from "../post/Post";
 import AddPost from "../form/AddPost";
+import { InputPlus } from "../Nav/Nav";
 
 const fetchData = async () => {
   const { posts } = await request(
@@ -33,21 +34,22 @@ const fetchData = async () => {
 };
 
 function PostsPage() {
-  const { data, resolvedData, latestData, status } = usePaginatedQuery(
-    "posts",
-    fetchData
-  );
-  useEffect(() => {
-    console.log(data, resolvedData, latestData);
-  }, []);
-
+  const [showForm, setShowForm] = useState(false);
+  const { status } = usePaginatedQuery("posts", fetchData);
+  const cache = useQueryCache();
+  let data = cache.getQueryData(["posts"]);
+  console.log(data, status);
+  useEffect(() => {}, []);
+  console.log(data, status);
   return (
     <>
       {status === "loading" && <h1>loading....</h1>}
       {status === "error" && <h1>loading....</h1>}
       {status === "success" && (
         <>
-          <AddPost />
+          {!showForm && <InputPlus clickToShow={setShowForm} />}
+
+          {showForm && <AddPost clickToShow={setShowForm} />}
           {data.data.map((post) => (
             <Post post={post} key={post.id} />
           ))}

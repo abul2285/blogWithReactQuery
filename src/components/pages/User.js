@@ -60,7 +60,7 @@ export default function UserPage() {
         <>
           <User info={data} />
           {data.posts.map((post) => (
-            <Post post={post} key={post.id} />
+            <Post post={post} user={data} key={post.id} />
           ))}
         </>
       )}

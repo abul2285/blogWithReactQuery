@@ -5,21 +5,22 @@ import Posts from "./components/pages/Posts";
 import Users from "./components/pages/Users";
 import Post from "./components/pages/Post";
 import User from "./components/pages/User";
+import Navbar from "./components/Nav/Nav";
 import { ReactQueryDevtools } from "react-query-devtools";
 
 export default function App() {
-  console.log("hi");
   return (
     <Router>
-      <ReactQueryDevtools />
+      <Navbar />
       <Switch>
-        <Route exact path="/posts" component={Posts} />
+        <Route exact path="/" component={Posts} />
         <Route exact path="/posts/:postId" component={Post} />
         <Route exact path="/users" component={Users} />
         <Route exact path="/users/:userId" component={User} />
         <Route path="/user" component={User} />
         <Route exact path="/posts/:postId/comments" component={Comments} />
       </Switch>
+      <ReactQueryDevtools />
     </Router>
   );
 }

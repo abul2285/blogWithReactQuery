@@ -174,7 +174,7 @@ const fetchUsers = async () => {
 };
 
 export default () => {
-  const { data, status } = useQuery("user", fetchUsers);
+  const { data, status } = useQuery("users", fetchUsers);
   return (
     <>
       {status === "loading" && <h1>loading....</h1>}

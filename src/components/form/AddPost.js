@@ -1,14 +1,14 @@
 import request, { gql } from "graphql-request";
 import React, { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryCache } from "react-query";
 import styled from "styled-components";
 
 const StyledForm = styled.form``;
 const StyledInput = styled.input``;
 
-const addPost = async () => {
-  const { post } = await request(
-    "",
+const addPost = async (data) => {
+  const dataf = await request(
+    "https://api.graphqlplaceholder.com/",
     gql`
       mutation addPost($data: PostInput!) {
         addPost(data: $data) {
@@ -25,27 +25,35 @@ const addPost = async () => {
       }
     `,
     {
-      userId: 1,
-      title: "test title",
-      body: "test body",
+      data: { ...data },
     }
   );
-  return post;
+  return dataf;
 };
 
-export default function AddPost() {
-  const [submitPost, { data }] = useMutation(addPost);
-  console.log(data);
+export default function AddPost({ clickToShow }) {
   const [{ title, body }, setPost] = useState({ title: "", body: "" });
+  const cache = useQueryCache();
+  let { data } = cache.getQueryData(["posts"]);
+
+  const [submitPost, {}] = useMutation(addPost, {
+    onSuccess: ({ addPost }) => {
+      const tempData = [{ ...addPost, id: Date.now() }, ...data];
+      cache.setQueryData("posts", { data: [...tempData] });
+    },
+  });
   const formSubmit = (e) => {
     e.preventDefault();
-    console.log(title, body);
+    submitPost({
+      userId: 1,
+      title,
+      body,
+    });
     setPost({ title: "", body: "" });
+    clickToShow(false);
   };
 
   const handleChange = (e) => {
-    console.log(e.target.name, "*********", e.target.value);
-    submitPost();
     setPost({
       title,
       body,
