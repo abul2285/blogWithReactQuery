@@ -16,7 +16,7 @@ a {
   padding: 6px 12px;
 }
 a:visited {
-  color: white;
+  color: orange;
 }
 a:active {
   color: greenyellow;

@@ -43,11 +43,7 @@ const Footer = () => (
   </GridFooter>
 );
 
-const Name = ({ user }) => (
-  <GridText>
-    <Link to={`users/${user.id}`}> {user.name}</Link>
-  </GridText>
-);
+const Name = ({ user }) => <GridText>{user.name}</GridText>;
 
 function UserGrid({ num, user }) {
   return (
@@ -56,6 +52,11 @@ function UserGrid({ num, user }) {
       <Name user={user} />
       <Body id={user.id} />
       <Footer />
+      <div className="cover">
+        <span>
+          <Link to={`users/${user.id}`}> View</Link>
+        </span>
+      </div>
     </GridItem>
   );
 }

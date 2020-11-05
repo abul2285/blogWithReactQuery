@@ -15,7 +15,7 @@ const fetchPosts = async (key, page) => {
   const { posts } = await request(EndPoint, GetPostsQuery, {
     pagination: {
       limit: 10,
-      page: page || 1,
+      page: page,
     },
   });
   return posts;

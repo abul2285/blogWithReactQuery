@@ -6,7 +6,7 @@ export default styled.nav`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   justify-content: center;
-  background: #bb0;
+  background: #333;
   margin-bottom: 25px;
 `;
 
@@ -39,10 +39,12 @@ export const InputItems = styled.div`
   margin: 0 auto 20px;
   padding: 10px;
   align-items: center;
-  background: #999;
+  background: #ddd;
+  color: #222;
   &:hover {
     background: transparent;
     border: 1px solid #999;
+    color: #223;
     cursor: pointer;
   }
 `;

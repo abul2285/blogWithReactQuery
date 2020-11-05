@@ -6,8 +6,8 @@ export default function NavBar() {
   return (
     <NavBarWrapper>
       <LinkItems>
-        <NavLink to="/posts">Posts</NavLink>
         <NavLink to="/">Home</NavLink>
+        <NavLink to="/posts">Posts</NavLink>
       </LinkItems>
     </NavBarWrapper>
   );

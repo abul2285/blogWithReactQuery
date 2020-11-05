@@ -2,7 +2,7 @@ const { default: styled } = require("styled-components");
 
 export const UserInfo = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: minmax(300px, 350px) auto;
   grid-gap: 50px;
   padding: 15px;
   background: white;
@@ -10,7 +10,7 @@ export const UserInfo = styled.div`
 `;
 
 export default styled.div`
-  background: #300;
+  background: #eee;
   padding: 30px;
 `;
 

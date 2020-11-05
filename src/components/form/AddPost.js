@@ -20,7 +20,6 @@ export default function AddPost({ clickToShow, postId }) {
 
   const [submitPost] = useMutation(mutationAddPost, {
     onSuccess: ({ addPost }) => {
-      console.log(addPost);
       const tempData = [
         { ...addPost, id: Date.now(), author: { ...addPost.author, id: 1 } },
         ...data,

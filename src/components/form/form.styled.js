@@ -9,13 +9,13 @@ export const FormWrapper = styled.div`
   display: grid;
   place-items: center;
   z-index: 100;
-  background: black;
+  background: #ccc;
 `;
 export const StyledForm = styled.form`
   padding: 50px;
   display: grid;
   grid-gap: 15px;
-  background: #333;
+  background: #ddd;
   border-radius: 10px;
 `;
 export const StyledInput = styled.input`

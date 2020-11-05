@@ -4,26 +4,55 @@ export const GridWrapper = styled.div`
   &.container {
     display: grid;
     margin: 0 auto;
-    width: 90%;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    width: 95%;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     grid-template-rows: repeat(2, minmax(300px, 1fr));
     grid-auto-rows: minmax(300px, 1fr);
-    grid-gap: 20px;
+    grid-gap: 50px;
   }
 `;
 
 export const GridItem = styled.div`
   &.item {
     border-radius: 20px;
-    background: #333;
+    background: #222;
     border-radius: 15px;
     display: grid;
-    grid-template-rows: 1fr 2fr 4fr 1fr;
+    grid-template-rows: 1fr 1fr 6fr 1fr;
     grid-row-gap: 1.1px;
+    position: relative;
     &:hover {
       & > div.top > * {
         &:nth-child(2) {
           display: block;
+        }
+      }
+      & > .cover {
+        opacity: 1;
+        z-index: 10;
+      }
+    }
+
+    & > .cover {
+      position: absolute;
+      opacity: 0;
+      content: "";
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      box-sizing: border-box;
+      background: rgba(0, 0, 0, 0.89);
+      & > span {
+        border: 1px solid blue;
+        padding: 10px 20px;
+        background: white;
+        cursor: pointer;
+        border-radius: 5px;
+        color: green;
+        & > a:link {
+          color: green;
         }
       }
     }

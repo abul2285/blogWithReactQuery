@@ -13,6 +13,9 @@ import PostWrapper, {
   ViewCount,
   PostBody,
   Button,
+  PostCommentWrapper,
+  ButtonWrapper,
+  Body,
 } from "./posts.styled";
 
 const mutationDeletePost = async (id) => {
@@ -58,23 +61,29 @@ export default function Post({ post, user }) {
       </Avatar>
 
       <PostBody>
-        <Title>
-          <Link to={`/posts/${post.id}`}>{post.title || post.body}</Link>
-        </Title>
-        <Comments>
-          <Link to={`/posts/${post.id}/comments`}>
-            {post.comments.length} Comment
-          </Link>
-        </Comments>
-        <ViewCount>
-          <FaEye size={20} />
-          {~~((Math.random() + 1) * 10)}
-        </ViewCount>
+        <Title>{post.title || post.body}</Title>
+        <Body>
+          <PostCommentWrapper>
+            <Comments>
+              <Link to={`/posts/${post.id}/comments`}>
+                {post.comments.length} Comment
+              </Link>
+            </Comments>
+            <ViewCount>
+              <FaEye size={20} />
+              {~~((Math.random() + 1) * 10)}
+            </ViewCount>
+          </PostCommentWrapper>
+          <ButtonWrapper>
+            <Button>
+              <Link to={`/posts/${post.id}`}>Read more</Link>
+            </Button>
+            <Button onClick={() => handleDelete(post.id)}>
+              <FaTrash />
+            </Button>
+          </ButtonWrapper>
+        </Body>
       </PostBody>
-
-      <Button onClick={() => handleDelete(post.id)}>
-        <FaTrash />
-      </Button>
     </PostWrapper>
   );
 }

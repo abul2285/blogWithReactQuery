@@ -3,13 +3,13 @@ import styled from "styled-components";
 export const Comments = styled.span`
   & > a {
     &:link {
-      color: white;
+      color: blue;
     }
     &:visited {
       color: black;
     }
     &:hover {
-      color: blue;
+      color: white;
     }
   }
 `;
@@ -22,33 +22,45 @@ export const ViewCount = styled.div`
   }
 `;
 
+export const PostCommentWrapper = styled.div`
+  display: flex;
+  margin-right: 0;
+`;
+
+export const ButtonWrapper = styled.div`
+  display: flex;
+  margin-left: auto;
+`;
+
+export const Body = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 export default styled.div`
-  background: #888;
-  border: 1px solid #975;
+  background: #eed;
+  border: 1px solid transparent;
   padding: 5px;
   border-radius: 8px;
   font-size: 1em;
-  margin: 5px auto;
+  margin: 30px auto;
   display: grid;
-  grid-gap: 10px;
-  position: relative;
-  overflow: hidden;
-  grid-template-columns: minmax(150px, 1fr) 5fr;
+  grid-gap: 50px;
+  grid-template-columns: minmax(100px, 1fr) 10fr;
   &:hover {
-    background: #777;
-    button {
-      display: block;
-    }
+    background: #eeeeef;
+    border: 1px solid #ddd;
   }
 `;
 
 export const Title = styled.p`
   & > a {
     &:link {
-      color: white;
+      color: black;
     }
     &:visited {
-      color: black;
+      color: orange;
     }
     &:hover {
       color: blue;
@@ -66,7 +78,7 @@ export const Avatar = styled.div`
     border-radius: 10%;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
 `;
 
@@ -81,12 +93,18 @@ export const PostBody = styled.div`
 export const Button = styled.button`
   padding: 6px 12px;
   border: none;
-  display: none;
-  position: absolute;
-  right: 0px;
-  border-bottom-left-radius: 10px;
+  margin: 2px;
   cursor: pointer;
-  color: red;
   font-size: 16px;
-  background: black;
+  background: #ddd;
+  &:hover {
+    color: white;
+    background: #222;
+    & > a:link {
+      color: white;
+    }
+  }
+  & > a:link {
+    color: black;
+  }
 `;

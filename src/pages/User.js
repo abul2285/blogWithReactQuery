@@ -28,6 +28,7 @@ export default function UserPage() {
         <>
           <User info={data} />
           <PostsStyled>
+            <h2>Posts..</h2>
             {data.posts.map((post) => (
               <Post post={post} user={data} key={post.id} />
             ))}

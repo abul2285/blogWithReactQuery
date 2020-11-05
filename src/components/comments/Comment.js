@@ -3,7 +3,6 @@ import request from "graphql-request";
 import { Link } from "react-router-dom";
 import { FaTrash } from "react-icons/fa";
 
-import { Button } from "../post/posts.styled";
 import { EndPoint } from "../../graphql/query";
 import { useMutation, useQueryCache } from "react-query";
 import { DeleteCommentMutation } from "../../graphql/mutation";
@@ -12,7 +11,9 @@ import CommentWrapper, {
   CommentBody,
   Title,
   User,
+  Button,
 } from "./comment.styled";
+import { Body } from "../post/posts.styled";
 
 const mutationDeleteComment = async (id) => {
   const data = await request(EndPoint, DeleteCommentMutation, {
@@ -61,13 +62,17 @@ export default function Comment({ comment, postId, post }) {
       </Avatar>
       <CommentBody>
         <Title>{comment.body}</Title>
-        <User>
-          <Link to={`/users/${comment.author.id}`}>{comment.author.name}</Link>
-        </User>
+        <Body>
+          <User>
+            <Link to={`/users/${comment.author.id}`}>
+              {comment.author.name}
+            </Link>
+          </User>
+          <Button onClick={handleDelete}>
+            <FaTrash />
+          </Button>
+        </Body>
       </CommentBody>
-      <Button onClick={handleDelete}>
-        <FaTrash />
-      </Button>
     </CommentWrapper>
   );
 }

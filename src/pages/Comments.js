@@ -27,8 +27,7 @@ const PostComment = styled.div`
   display: grid;
   grid-template-columns: minmax(500px, 800px);
   justify-content: center;
-  background: #999;
-  max-width: 850px;
+  grid-gap: 30px;
   margin: 0 auto;
   padding: 50px;
   box-sizing: border-box;
@@ -65,6 +64,7 @@ export default function Comments() {
           )}
           {showForm && <AddComment id={postId} clickToShow={setShowForm} />}
           <PostComment>
+            <h2>Comments..</h2>
             {comments.map((comment) => (
               <Comment key={comment.id} comment={comment} postId={postId} />
             ))}
