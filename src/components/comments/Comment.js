@@ -1,9 +1,12 @@
-import request, { gql } from "graphql-request";
 import React from "react";
+import request from "graphql-request";
+import { Link } from "react-router-dom";
 import { FaTrash } from "react-icons/fa";
-import { useMutation, useQueryCache } from "react-query";
-import { Link, useParams } from "react-router-dom";
+
 import { Button } from "../post/posts.styled";
+import { EndPoint } from "../../graphql/query";
+import { useMutation, useQueryCache } from "react-query";
+import { DeleteCommentMutation } from "../../graphql/mutation";
 import CommentWrapper, {
   Avatar,
   CommentBody,
@@ -11,37 +14,31 @@ import CommentWrapper, {
   User,
 } from "./comment.styled";
 
-const deleteComment = async (id) => {
-  const data = await request(
-    "https://api.graphqlplaceholder.com/",
-    gql`
-      mutation deleteComment($commentId: ID!) {
-        deleteComment(commentId: $commentId) {
-          id
-        }
-      }
-    `,
-
-    {
-      ...id,
-    }
-  );
+const mutationDeleteComment = async (id) => {
+  const data = await request(EndPoint, DeleteCommentMutation, {
+    ...id,
+  });
   return data;
 };
 
 export default function Comment({ comment, postId, post }) {
   const cache = useQueryCache();
   let data = cache.getQueryData(["comments", +postId]);
+
   if (!data) {
     data = cache.getQueryData(["post", +postId]);
   }
-  const [commentDelete, { status }] = useMutation(deleteComment, {
+
+  const [commentDelete] = useMutation(mutationDeleteComment, {
     onSuccess: ({ deleteComment: { id } }) => {
       let commentData = data;
+
       if (!Array.isArray(data)) {
         commentData = [...data.comments];
       }
-      let tempData = commentData.filter((item) => item.id != id);
+
+      let tempData = commentData.filter((item) => item.id !== id);
+
       Array.isArray(data)
         ? cache.setQueryData(["comments", +postId], [...tempData])
         : cache.setQueryData(["post", +postId], {
@@ -50,11 +47,13 @@ export default function Comment({ comment, postId, post }) {
           });
     },
   });
+
   const handleDelete = () => {
     commentDelete({
       commentId: comment.id,
     });
   };
+
   return (
     <CommentWrapper>
       <Avatar>

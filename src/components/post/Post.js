@@ -1,8 +1,11 @@
-import request, { gql } from "graphql-request";
 import React from "react";
-import { FaTrash } from "react-icons/fa";
-import { useMutation, useQueryCache } from "react-query";
+import request from "graphql-request";
+import { FaEye, FaTrash } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
+import { useMutation, useQueryCache } from "react-query";
+
+import { EndPoint } from "../../graphql/query";
+import { DeletePostMutation } from "../../graphql/mutation";
 import PostWrapper, {
   Avatar,
   Comments,
@@ -12,38 +15,31 @@ import PostWrapper, {
   Button,
 } from "./posts.styled";
 
-const deletePost = async (id) => {
-  const { post } = await request(
-    "https://api.graphqlplaceholder.com/",
-    gql`
-      mutation deletePost($postId: ID!) {
-        deletePost(postId: $postId) {
-          id
-        }
-      }
-    `,
-
-    {
-      ...id,
-    }
-  );
+const mutationDeletePost = async (id) => {
+  const { post } = await request(EndPoint, DeletePostMutation, {
+    ...id,
+  });
   return post;
 };
 
 export default function Post({ post, user }) {
-  const cache = useQueryCache();
   let data;
+  const cache = useQueryCache();
   const { userId } = useParams();
+
   if (userId) {
     ({ posts: data } = cache.getQueryData(["user", +post.author.id]));
   } else {
-    ({ data } = cache.getQueryData(["posts"]));
+    ({ data } = cache.getQueryData(["posts", +post.author.id]));
   }
-  const [postDelete, { status }] = useMutation(deletePost, {
+
+  const [postDelete] = useMutation(mutationDeletePost, {
     onSuccess: () => {
-      let tempData = data.filter((item) => item.id != post.id);
+      let tempData = data.filter((item) => item.id !== post.id);
       !userId
-        ? cache.setQueryData("posts", { data: [...tempData] })
+        ? cache.setQueryData(["posts", +post.author.id], {
+            data: [...tempData],
+          })
         : cache.setQueryData(["user", +post.author.id], {
             ...user,
             posts: [...tempData],
@@ -60,6 +56,7 @@ export default function Post({ post, user }) {
       <Avatar>
         <img src={`https://i.pravatar.cc/100?u=${post.author.id}`} alt="" />
       </Avatar>
+
       <PostBody>
         <Title>
           <Link to={`/posts/${post.id}`}>{post.title || post.body}</Link>
@@ -69,8 +66,12 @@ export default function Post({ post, user }) {
             {post.comments.length} Comment
           </Link>
         </Comments>
-        <ViewCount>{~~((Math.random() + 1) * 10)}</ViewCount>
+        <ViewCount>
+          <FaEye size={20} />
+          {~~((Math.random() + 1) * 10)}
+        </ViewCount>
       </PostBody>
+
       <Button onClick={() => handleDelete(post.id)}>
         <FaTrash />
       </Button>

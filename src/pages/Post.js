@@ -1,53 +1,34 @@
-import request, { gql } from "graphql-request";
 import React from "react";
-import { usePaginatedQuery } from "react-query";
-import { useParams } from "react-router";
+import request from "graphql-request";
 import styled from "styled-components";
-import Comment from "../comments/Comment";
+import { useParams } from "react-router";
+import { usePaginatedQuery } from "react-query";
+
+import Error from "../components/error/Error";
+import Loading from "../components/loading/Loading";
+import Comment from "../components/comments/Comment";
+import { EndPoint, GetPostQuery } from "../graphql/query";
 
 const fetchPost = async (key, id) => {
-  const { post } = await request(
-    "https://api.graphqlplaceholder.com/",
-    gql`
-      query post($postId: ID!) {
-        post(postId: $postId) {
-          id
-          title
-          body
-          author {
-            name
-          }
-          comments {
-            body
-            author {
-              name
-              id
-            }
-            id
-          }
-        }
-      }
-    `,
-    {
-      postId: id,
-    }
-  );
+  const { post } = await request(EndPoint, GetPostQuery, {
+    postId: id,
+  });
   return post;
 };
 
 const PostBody = styled.div`
-  background: white;
   padding: 30px;
   align-self: start;
+  background: white;
   border-radius: 10px;
 `;
 
 const PostWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   padding: 30px;
   grid-gap: 10px;
   background: #999;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
 `;
 
 const PostComment = styled.div``;
@@ -56,8 +37,8 @@ export default function Post() {
   const { data, status } = usePaginatedQuery(["post", +postId], fetchPost);
   return (
     <>
-      {status === "loading" && <h1>loading....</h1>}
-      {status === "error" && <h1>loading....</h1>}
+      {status === "loading" && <Loading />}
+      {status === "error" && <Error />}
       {status === "success" && (
         <>
           <PostWrapper>

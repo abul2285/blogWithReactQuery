@@ -1,44 +1,34 @@
-import request, { gql } from "graphql-request";
+import request from "graphql-request";
 import React, { useState } from "react";
 import { useMutation, useQueryCache } from "react-query";
+
+import { EndPoint } from "../../graphql/query";
+import { AddPostMutation } from "../../graphql/mutation";
 import { FormWrapper, StyledInput, StyledForm, Submit } from "./form.styled";
 
-const addPost = async (data) => {
-  const dataf = await request(
-    "https://api.graphqlplaceholder.com/",
-    gql`
-      mutation addPost($data: PostInput!) {
-        addPost(data: $data) {
-          title
-          id
-          body
-          comments {
-            body
-          }
-          author {
-            name
-          }
-        }
-      }
-    `,
-    {
-      data: { ...data },
-    }
-  );
-  return dataf;
+const mutationAddPost = async (data) => {
+  const post = await request(EndPoint, AddPostMutation, {
+    data: { ...data },
+  });
+  return post;
 };
 
-export default function AddPost({ clickToShow }) {
-  const [{ title, body }, setPost] = useState({ title: "", body: "" });
+export default function AddPost({ clickToShow, postId }) {
   const cache = useQueryCache();
-  let { data } = cache.getQueryData(["posts"]);
+  const [{ title, body }, setPost] = useState({ title: "", body: "" });
+  let { data } = cache.getQueryData(["posts", postId]);
 
-  const [submitPost, {}] = useMutation(addPost, {
+  const [submitPost] = useMutation(mutationAddPost, {
     onSuccess: ({ addPost }) => {
-      const tempData = [{ ...addPost, id: Date.now() }, ...data];
-      cache.setQueryData("posts", { data: [...tempData] });
+      console.log(addPost);
+      const tempData = [
+        { ...addPost, id: Date.now(), author: { ...addPost.author, id: 1 } },
+        ...data,
+      ];
+      cache.setQueryData(["posts", postId], { data: [...tempData] });
     },
   });
+
   const formSubmit = (e) => {
     e.preventDefault();
 
@@ -49,7 +39,9 @@ export default function AddPost({ clickToShow }) {
         title,
         body,
       });
+
     setPost({ title: "", body: "" });
+
     clickToShow(false);
   };
 
@@ -80,6 +72,7 @@ export default function AddPost({ clickToShow }) {
           onChange={(e) => handleChange(e)}
         />
         <Submit type="submit">Submit</Submit>
+        <Submit>Cancel</Submit>
       </StyledForm>
     </FormWrapper>
   );

@@ -3,11 +3,23 @@ import CommentWrapper, { PostBody } from "../post/posts.styled";
 
 export default styled(CommentWrapper)``;
 
-export const Title = styled.p``;
+export const Title = styled.p`
+  color: #111;
+`;
 
 export const User = styled.span`
   font-size: 0.9rem;
-  color: greenyellow;
+  & > a {
+    &:link {
+      color: white;
+    }
+    &:visited {
+      color: black;
+    }
+    &:hover {
+      color: blue;
+    }
+  }
 `;
 
 export const Avatar = styled.div`

@@ -1,10 +1,10 @@
 import React from "react";
 import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
-import Comments from "./components/pages/Comments";
-import Posts from "./components/pages/Posts";
-import Users from "./components/pages/Users";
-import Post from "./components/pages/Post";
-import User from "./components/pages/User";
+import Comments from "./pages/Comments";
+import Posts from "./pages/Posts";
+import Users from "./pages/Users";
+import Post from "./pages/Post";
+import User from "./pages/User";
 import Navbar from "./components/Nav/Nav";
 import { ReactQueryDevtools } from "react-query-devtools";
 

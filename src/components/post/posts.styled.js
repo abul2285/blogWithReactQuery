@@ -1,9 +1,25 @@
 import styled from "styled-components";
 
-export const Comments = styled.span``;
+export const Comments = styled.span`
+  & > a {
+    &:link {
+      color: white;
+    }
+    &:visited {
+      color: black;
+    }
+    &:hover {
+      color: blue;
+    }
+  }
+`;
 
-export const ViewCount = styled.p`
-  color: yellow;
+export const ViewCount = styled.div`
+  color: black;
+  display: flex;
+  & > svg {
+    margin-right: 10px;
+  }
 `;
 
 export default styled.div`
@@ -26,7 +42,19 @@ export default styled.div`
   }
 `;
 
-export const Title = styled.p``;
+export const Title = styled.p`
+  & > a {
+    &:link {
+      color: white;
+    }
+    &:visited {
+      color: black;
+    }
+    &:hover {
+      color: blue;
+    }
+  }
+`;
 
 export const User = styled.span`
   font-size: 0.9rem;

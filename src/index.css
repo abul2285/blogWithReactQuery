@@ -4,7 +4,6 @@ body {
     "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* background: rgb(240, 179, 139); */
 }
 
 code {
@@ -14,4 +13,17 @@ code {
 
 a {
   text-decoration: none;
+  padding: 6px 12px;
 }
+a:visited {
+  color: white;
+}
+a:active {
+  color: greenyellow;
+}
+a:hover {
+  color: black;
+}
+/* a:{
+  color: aqua;
+} */

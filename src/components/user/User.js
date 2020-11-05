@@ -1,4 +1,5 @@
 import React from "react";
+
 import UserWrapper, {
   Avatar,
   Info,
@@ -6,6 +7,7 @@ import UserWrapper, {
   PersonalInof,
   UserInfo,
 } from "./user.style";
+
 export default function User({ info }) {
   return (
     <UserWrapper>

@@ -3,7 +3,7 @@ const { default: styled } = require("styled-components");
 export const UserInfo = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-gap: 20px;
+  grid-gap: 50px;
   padding: 15px;
   background: white;
   border-radius: 20px;
@@ -24,7 +24,7 @@ export const OtherInfo = styled.div`
 `;
 
 export const Info = styled.div`
-  color: #ccc;
+  color: #222;
   h3 {
     font-size: 1.5rem;
     margin-bottom: 10px;

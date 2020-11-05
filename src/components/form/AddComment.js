@@ -1,32 +1,25 @@
-import request, { gql } from "graphql-request";
+import request from "graphql-request";
 import React, { useState } from "react";
 import { useMutation, useQueryCache } from "react-query";
+
+import { EndPoint } from "../../graphql/query";
+import { AddCommentMutation } from "../../graphql/mutation";
 import { FormWrapper, StyledInput, StyledForm, Submit } from "./form.styled";
 
-const addComment = async (data) => {
-  const dataf = await request(
-    "https://api.graphqlplaceholder.com/",
-    gql`
-      mutation addComment($data: CommentInput!) {
-        addComment(data: $data) {
-          id
-        }
-      }
-    `,
-    {
-      data: { ...data },
-    }
-  );
-  return dataf;
+const mutationAddComment = async (data) => {
+  const comments = await request(EndPoint, AddCommentMutation, {
+    data: { ...data },
+  });
+  return comments;
 };
 
 export default function AddComment({ id, clickToShow }) {
-  const [body, setBody] = useState("");
   const cache = useQueryCache();
+  const [body, setBody] = useState("");
   let data = cache.getQueryData(["comments", +id]);
 
-  const [submitComment, {}] = useMutation(addComment, {
-    onError: ({ addComment }) => {
+  const [submitComment] = useMutation(mutationAddComment, {
+    onError: () => {
       const tempData = [
         {
           body,
@@ -41,15 +34,19 @@ export default function AddComment({ id, clickToShow }) {
       cache.setQueryData(["comments", +id], [...tempData]);
     },
   });
+
   const formSubmit = (e) => {
     e.preventDefault();
+
     body &&
       submitComment({
         userId: 1,
         body,
         postId: 1,
       });
+
     setBody("");
+
     clickToShow(false);
   };
 
@@ -65,6 +62,7 @@ export default function AddComment({ id, clickToShow }) {
           onChange={(e) => setBody(e.target.value)}
         />
         <Submit type="submit">Submit</Submit>
+        <Submit>Cancel</Submit>
       </StyledForm>
     </FormWrapper>
   );
