@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { useParams } from "react-router";
 import AddComment from "../form/AddComment";
 import { InputPlus } from "../Nav/Nav";
+import { FaPlus } from "react-icons/fa";
 
 const fetchComment = async (key, id) => {
   const {
@@ -38,7 +39,17 @@ const fetchComment = async (key, id) => {
   );
   return data;
 };
-const PostComment = styled.div``;
+const PostComment = styled.div`
+  display: grid;
+  grid-template-columns: minmax(500px, 800px);
+  justify-content: center;
+  background: #999;
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 50px;
+  box-sizing: border-box;
+  border-radius: 20px;
+`;
 export default function Comments() {
   const [showForm, setShowForm] = useState(false);
   const [comments, setComments] = useState([]);
@@ -50,13 +61,10 @@ export default function Comments() {
 
   useEffect(() => {
     if (data) {
-      console.log({ data, postId });
       const comments = data.filter((item) => item.post.id === postId);
       setComments([...comments]);
-      console.log(comments);
     }
   }, [postId, data]);
-  console.log(comments);
 
   return (
     <>
@@ -64,7 +72,12 @@ export default function Comments() {
       {status === "error" && <h1>loading....</h1>}
       {status === "success" && (
         <>
-          {!showForm && <InputPlus clickToShow={setShowForm} />}
+          {!showForm && (
+            <InputPlus clickToShow={setShowForm}>
+              <FaPlus />
+              <small>Add Comments</small>
+            </InputPlus>
+          )}
           {showForm && <AddComment id={postId} clickToShow={setShowForm} />}
           <PostComment>
             {comments.map((comment) => (

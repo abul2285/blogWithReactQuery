@@ -1,5 +1,6 @@
 import request, { gql } from "graphql-request";
 import React from "react";
+import { FaTrash } from "react-icons/fa";
 import { useMutation, useQueryCache } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import PostWrapper, {
@@ -8,6 +9,7 @@ import PostWrapper, {
   Title,
   ViewCount,
   PostBody,
+  Button,
 } from "./posts.styled";
 
 const deletePost = async (id) => {
@@ -39,7 +41,6 @@ export default function Post({ post, user }) {
   }
   const [postDelete, { status }] = useMutation(deletePost, {
     onSuccess: () => {
-      console.log(data);
       let tempData = data.filter((item) => item.id != post.id);
       !userId
         ? cache.setQueryData("posts", { data: [...tempData] })
@@ -50,11 +51,9 @@ export default function Post({ post, user }) {
     },
   });
   const handleDelete = (id) => {
-    console.log(id);
     postDelete({
       postId: +id,
     });
-    console.log(status);
   };
   return (
     <PostWrapper>
@@ -72,7 +71,9 @@ export default function Post({ post, user }) {
         </Comments>
         <ViewCount>{~~((Math.random() + 1) * 10)}</ViewCount>
       </PostBody>
-      <button onClick={() => handleDelete(post.id)}>delete</button>
+      <Button onClick={() => handleDelete(post.id)}>
+        <FaTrash />
+      </Button>
     </PostWrapper>
   );
 }

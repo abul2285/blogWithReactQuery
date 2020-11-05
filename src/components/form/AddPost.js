@@ -1,10 +1,7 @@
 import request, { gql } from "graphql-request";
 import React, { useState } from "react";
 import { useMutation, useQueryCache } from "react-query";
-import styled from "styled-components";
-
-const StyledForm = styled.form``;
-const StyledInput = styled.input``;
+import { FormWrapper, StyledInput, StyledForm, Submit } from "./form.styled";
 
 const addPost = async (data) => {
   const dataf = await request(
@@ -44,11 +41,14 @@ export default function AddPost({ clickToShow }) {
   });
   const formSubmit = (e) => {
     e.preventDefault();
-    submitPost({
-      userId: 1,
-      title,
-      body,
-    });
+
+    title &&
+      body &&
+      submitPost({
+        userId: 1,
+        title,
+        body,
+      });
     setPost({ title: "", body: "" });
     clickToShow(false);
   };
@@ -61,20 +61,26 @@ export default function AddPost({ clickToShow }) {
     });
   };
   return (
-    <StyledForm onSubmit={formSubmit}>
-      <StyledInput
-        type="text"
-        value={title}
-        name="title"
-        onChange={(e) => handleChange(e)}
-      />
-      <StyledInput
-        type="text"
-        value={body}
-        name="body"
-        onChange={(e) => handleChange(e)}
-      />
-      <button type="submit">submit</button>
-    </StyledForm>
+    <FormWrapper>
+      <StyledForm onSubmit={formSubmit}>
+        <StyledInput
+          type="text"
+          value={title}
+          name="title"
+          placeholder="Title"
+          autoComplete="off"
+          onChange={(e) => handleChange(e)}
+        />
+        <StyledInput
+          type="text"
+          value={body}
+          name="body"
+          autoComplete="off"
+          placeholder="Body"
+          onChange={(e) => handleChange(e)}
+        />
+        <Submit type="submit">Submit</Submit>
+      </StyledForm>
+    </FormWrapper>
   );
 }

@@ -1,14 +1,7 @@
 import styled from "styled-components";
+import CommentWrapper, { PostBody } from "../post/posts.styled";
 
-export default styled.div`
-  background: #999;
-  padding: 5px;
-  border-radius: 10px;
-  font-size: 1em;
-  margin: 5px auto;
-  display: grid;
-  grid-template-columns: minmax(150px, 1fr) 5fr;
-`;
+export default styled(CommentWrapper)``;
 
 export const Title = styled.p``;
 
@@ -27,9 +20,4 @@ export const Avatar = styled.div`
   }
 `;
 
-export const CommentBody = styled.div`
-  background: gray;
-  padding: 5px 10px;
-  margin-left: 10px;
-  border-radius: 9px;
-`;
+export const CommentBody = styled(PostBody)``;

@@ -36,7 +36,7 @@ const fetchPost = async (key, id) => {
 };
 
 const PostBody = styled.div`
-  background: orange;
+  background: white;
   padding: 30px;
   align-self: start;
   border-radius: 10px;
@@ -47,14 +47,13 @@ const PostWrapper = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   padding: 30px;
   grid-gap: 10px;
-  background: #300;
+  background: #999;
 `;
 
 const PostComment = styled.div``;
 export default function Post() {
   const { postId } = useParams();
   const { data, status } = usePaginatedQuery(["post", +postId], fetchPost);
-  console.log(data);
   return (
     <>
       {status === "loading" && <h1>loading....</h1>}
@@ -63,15 +62,31 @@ export default function Post() {
         <>
           <PostWrapper>
             <PostBody>
-              {data.body}
-              <br />
-              {data.body}
-              <br />
-              {data.body}
+              <h2>{`${data.title}`.toUpperCase()}</h2>
+              <p>
+                {data.body}
+                {data.body}
+                {data.body}
+              </p>
+              <p>
+                {data.body}
+                {data.body}
+                {data.body}
+              </p>
+              <p>
+                {data.body}
+                {data.body}
+                {data.body}
+              </p>
             </PostBody>
             <PostComment>
               {data.comments.map((comment) => (
-                <Comment key={comment.id} comment={comment} postId={postId} />
+                <Comment
+                  key={comment.id}
+                  comment={comment}
+                  postId={postId}
+                  post={data}
+                />
               ))}
             </PostComment>
           </PostWrapper>

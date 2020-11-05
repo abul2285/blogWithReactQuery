@@ -1,7 +1,9 @@
 import request, { gql } from "graphql-request";
 import React from "react";
+import { FaTrash } from "react-icons/fa";
 import { useMutation, useQueryCache } from "react-query";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { Button } from "../post/posts.styled";
 import CommentWrapper, {
   Avatar,
   CommentBody,
@@ -10,7 +12,7 @@ import CommentWrapper, {
 } from "./comment.styled";
 
 const deleteComment = async (id) => {
-  const com = await request(
+  const data = await request(
     "https://api.graphqlplaceholder.com/",
     gql`
       mutation deleteComment($commentId: ID!) {
@@ -24,17 +26,28 @@ const deleteComment = async (id) => {
       ...id,
     }
   );
-  console.log(id);
-  return com;
+  return data;
 };
 
-export default function Comment({ comment, postId }) {
+export default function Comment({ comment, postId, post }) {
   const cache = useQueryCache();
   let data = cache.getQueryData(["comments", +postId]);
+  if (!data) {
+    data = cache.getQueryData(["post", +postId]);
+  }
   const [commentDelete, { status }] = useMutation(deleteComment, {
     onSuccess: ({ deleteComment: { id } }) => {
-      let tempData = data.filter((item) => item.id != id);
-      cache.setQueryData(["comments", +postId], [...tempData]);
+      let commentData = data;
+      if (!Array.isArray(data)) {
+        commentData = [...data.comments];
+      }
+      let tempData = commentData.filter((item) => item.id != id);
+      Array.isArray(data)
+        ? cache.setQueryData(["comments", +postId], [...tempData])
+        : cache.setQueryData(["post", +postId], {
+            ...data,
+            comments: [...tempData],
+          });
     },
   });
   const handleDelete = () => {
@@ -53,7 +66,9 @@ export default function Comment({ comment, postId }) {
           <Link to={`/users/${comment.author.id}`}>{comment.author.name}</Link>
         </User>
       </CommentBody>
-      <button onClick={handleDelete}>delete</button>
+      <Button onClick={handleDelete}>
+        <FaTrash />
+      </Button>
     </CommentWrapper>
   );
 }

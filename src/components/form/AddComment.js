@@ -1,10 +1,7 @@
 import request, { gql } from "graphql-request";
 import React, { useState } from "react";
 import { useMutation, useQueryCache } from "react-query";
-import styled from "styled-components";
-
-const StyledForm = styled.form``;
-const StyledInput = styled.input``;
+import { FormWrapper, StyledInput, StyledForm, Submit } from "./form.styled";
 
 const addComment = async (data) => {
   const dataf = await request(
@@ -27,9 +24,8 @@ export default function AddComment({ id, clickToShow }) {
   const [body, setBody] = useState("");
   const cache = useQueryCache();
   let data = cache.getQueryData(["comments", +id]);
-  console.log(data, id);
 
-  const [submitPost, {}] = useMutation(addComment, {
+  const [submitComment, {}] = useMutation(addComment, {
     onError: ({ addComment }) => {
       const tempData = [
         {
@@ -42,30 +38,34 @@ export default function AddComment({ id, clickToShow }) {
         },
         ...data,
       ];
-      console.log(tempData);
       cache.setQueryData(["comments", +id], [...tempData]);
     },
   });
   const formSubmit = (e) => {
     e.preventDefault();
-    submitPost({
-      userId: 1,
-      body,
-      postId: 1,
-    });
+    body &&
+      submitComment({
+        userId: 1,
+        body,
+        postId: 1,
+      });
     setBody("");
     clickToShow(false);
   };
 
   return (
-    <StyledForm onSubmit={formSubmit}>
-      <StyledInput
-        type="text"
-        value={body}
-        name="body"
-        onChange={(e) => setBody(e.target.value)}
-      />
-      <button type="submit">submit</button>
-    </StyledForm>
+    <FormWrapper>
+      <StyledForm onSubmit={formSubmit}>
+        <StyledInput
+          type="text"
+          value={body}
+          name="body"
+          placeholder="Body"
+          autoComplete="off"
+          onChange={(e) => setBody(e.target.value)}
+        />
+        <Submit type="submit">Submit</Submit>
+      </StyledForm>
+    </FormWrapper>
   );
 }

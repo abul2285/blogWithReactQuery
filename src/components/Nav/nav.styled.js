@@ -33,5 +33,16 @@ export const InputItems = styled.div`
   display: flex;
   align-self: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 1.5rem;
+  max-width: 500px;
+  border: 1px solid transparent;
+  margin: 0 auto 20px;
+  padding: 10px;
+  align-items: center;
+  background: #999;
+  &:hover {
+    background: transparent;
+    border: 1px solid #999;
+    cursor: pointer;
+  }
 `;
